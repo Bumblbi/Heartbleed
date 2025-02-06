@@ -24,3 +24,14 @@ clientHello = (
 	0x00, 0x00, # Extension block length: 0, without extensions
 )
 
+def recv_all(socket, length):
+	response = b''
+	total_bytes_remaining = length
+	while total_bytes_remaining > 0:
+		readable, writeable, error = select.select([socket], [], []) # select is used to monitor the socket
+		if socket in readable:
+			data = socket.recv(total_bytes_remaining) # the socket tries to read the remaining bytes from the socket buffer
+			response += data
+			total_bytes_remeining -= len(data)
+	return respose
+	
