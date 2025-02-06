@@ -34,4 +34,16 @@ def recv_all(socket, length):
 			response += data
 			total_bytes_remeining -= len(data)
 	return respose
-	
+
+def readPacket(socket):
+	headerLength = 6
+	payload = b''
+	header = recv_all(socket, headerLength) # reading six bytes from the socket
+	print(header.hex(" "))
+	if header != b'':
+		type, version, length, msgType = struct,unpack('>BHHB', header) # decompressing bytes into four variables
+		if length > 0:
+			payload += recv_all(socket, length - 1) # if length is greater than 0, then we can read the remaining bytes of the data packet from the socket.
+	else:
+		print("Respose has no header")
+	return type, version, payload, msgType
