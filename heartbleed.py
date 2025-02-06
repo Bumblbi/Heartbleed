@@ -55,3 +55,10 @@ heartbeat = (
 	0x01, # Heartbeat-request
 	0x00, 0x40 # Payload Length: 64 Kbytes
 )
+
+def readServerHeartBeat(socket):
+	payload = b''
+	for i in range(0, 4):
+		type, version packet_payload, msgType = readPacket(socket) # Reading four Heartbeat-responses
+		payload += packet_payload # combining the payload of four responses into one payload
+	return(type, version, payload, msgType)
