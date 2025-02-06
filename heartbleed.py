@@ -47,3 +47,11 @@ def readPacket(socket):
 	else:
 		print("Respose has no header")
 	return type, version, payload, msgType
+
+heartbeat = (
+	0x18, # Type: Heartbeat-message
+	0x03, 0x03, # Version TLS: TLS 1.2
+	0x00, 0x03 # Packet length: 3 bytes
+	0x01, # Heartbeat-request
+	0x00, 0x40 # Payload Length: 64 Kbytes
+)
